@@ -1,0 +1,38 @@
+@startuml
+title Fix Protocol Sequence Diagram
+
+group LOGON
+    Initiator -> Acceptor: Logon(A)
+    Acceptor -> Initiator: Logon(A)
+end
+
+group HEARTBEAT
+    Initiator -> Acceptor: Heartbeat(0)
+    Acceptor -> Initiator: Heartbeat(0)
+end
+
+group TEST REQUEST
+    Initiator -> Acceptor: TestRequest(1)
+    Acceptor -> Initiator: Heartbeat(0)
+end
+
+group RESEND REQUEST (NO MSG TO RESEND)
+    Initiator -> Acceptor: ResendRequest(2)
+    Acceptor -> Initiator: SequenceReset(4) GapFill(123)=Y
+end
+
+group RESEND REQUEST
+    Initiator -> Acceptor: ResendRequest(2)
+    Acceptor -> Initiator: NewOrderSingle(D) PossDupFlag(43)=Y
+end
+
+group SEQUENCE RESET
+    Initiator -> Acceptor: Heartbeat(0)
+    Acceptor -> Initiator: SequenceReset(4) GapFill(123)=N
+end
+
+group LOGOUT
+    Initiator -> Acceptor: Logout(5)
+    Acceptor -> Initiator: Logout(5)
+end
+@enduml
